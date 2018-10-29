@@ -23,18 +23,15 @@ else:
 
 class RTMLoop(object):
     """Real Time Message loop
-
     _errors(Queue): contains error message(dict("result", "msg")),
                     looks self._set_error()
     _inbox(Queue): contains RTMMessage
     _worker(threading.Thread): a thread for running the loop
-
     Args:
         ws_host(str): websocket host
     """
 
     def __init__(self, ws_host):
-        print("def __init__(self, ws_host)")
         self._call_id = 0
         self._inbox = Queue()
         self._errors = Queue()
@@ -50,8 +47,6 @@ class RTMLoop(object):
 
     def on_open(self, ws):
         """Websocket on_open event handler"""
-        print("On open")
-
         def keep_alive(interval):
             while True:
                 time.sleep(interval)
@@ -61,7 +56,6 @@ class RTMLoop(object):
 
     def on_message(self, ws, message):
         """Websocket on_message event handler
-
         Saves message as RTMMessage in self._inbox
         """
         try:
@@ -73,7 +67,6 @@ class RTMLoop(object):
 
     def on_error(self, ws, error):
         """Websocket on_error event handler
-
         Saves error message in self._errors
         """
         self._set_error(error, "read socket failed")
@@ -84,7 +77,6 @@ class RTMLoop(object):
 
     def _set_error(self, result, msg):
         """Puts a error to self._errors
-
         Args:
             result(mix): received data
             msg(str): message
@@ -93,7 +85,6 @@ class RTMLoop(object):
 
     def start(self, keep_alive_interval=2):
         """Starts the main loop
-
         Args:
             keep_alive_interval(int): the interval(second) of sending keep
                                       alive message
@@ -113,7 +104,6 @@ class RTMLoop(object):
 
     def gen_call_id(self):
         """Generates a call_id
-
         Returns:
             int: the call_id
         """
@@ -123,10 +113,8 @@ class RTMLoop(object):
     def send(self, message):
         """Sends a RTMMessage
         Should be called after starting the loop
-
         Args:
             message(RTMMessage): the sending message
-
         Raises:
             WebSocketConnectionClosedException: if the loop is closed
         """
@@ -137,12 +125,10 @@ class RTMLoop(object):
 
     def get_message(self, block=False, timeout=None):
         """Removes and returns a RTMMessage from self._inbox
-
         Args:
             block(bool): if True block until a RTMMessage is available,
                          else it will return None when self._inbox is empty
             timeout(int): it blocks at most timeout seconds
-
         Returns:
             RTMMessage if self._inbox is not empty, else None
         """
@@ -154,12 +140,10 @@ class RTMLoop(object):
 
     def get_error(self, block=False, timeout=None):
         """Removes and returns an error from self._errors
-
         Args:
             block(bool): if True block until a RTMMessage is available,
                          else it will return None when self._inbox is empty
             timeout(int): it blocks at most timeout seconds
-
         Returns:
             error if inbox is not empty, else None
         """
